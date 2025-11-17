@@ -1,11 +1,11 @@
-# Math & Physics AI Tutor
+# Math AI Tutor
 
 [![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)]()
 [![Streamlit](https://img.shields.io/badge/Streamlit-App-red.svg)]()
 [![OpenAI](https://img.shields.io/badge/OpenAI-API-black.svg)]()
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)]()
 
-Tutor educacional inteligente de Matemática e Física usando IA.
+Tutor educacional inteligente de Matemática usando IA.
 
 ## 🌐 Aplicação Online
 
