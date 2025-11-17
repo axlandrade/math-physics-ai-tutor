@@ -1,11 +1,5 @@
 # app/cli_chat.py
 
-import sys, os
-ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_DIR = os.path.dirname(ROOT_DIR)
-if PROJECT_DIR not in sys.path:
-    sys.path.append(PROJECT_DIR)
-
 from app.core import get_client, chat_with_memory
 
 
