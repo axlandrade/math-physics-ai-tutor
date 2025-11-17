@@ -1,15 +1,8 @@
-# app/config_example.py
-#
-# Copie este arquivo para config.py e preencha com sua chave de API.
-# NÃO COMITE o arquivo config.py com a chave em repositórios públicos.
-
 import os
+from dotenv import load_dotenv
 
-# Você pode configurar a chave via variável de ambiente:
-#   export OPENAI_API_KEY="sua_chave"
-# ou preencher manualmente aqui (apenas localmente).
+# Carrega .env se existir (local)
+load_dotenv()
 
-API_KEY = os.getenv("OPENAI_API_KEY", "SUA_CHAVE_AQUI")
-
-# Modelo recomendado para chatbot educacional
+API_KEY = os.getenv("OPENAI_API_KEY")
 MODEL_NAME = "gpt-4.1-mini"
