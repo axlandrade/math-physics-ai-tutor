@@ -1,5 +1,11 @@
 # app/pedagogical_profile.py
 
+import sys, os
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_DIR = os.path.dirname(ROOT_DIR)
+if PROJECT_DIR not in sys.path:
+    sys.path.append(PROJECT_DIR)
+
 SYSTEM_PROMPT = """
 Você é um tutor educacional especializado em Matemática e Física
 para estudantes de Ensino Médio e início de graduação.
