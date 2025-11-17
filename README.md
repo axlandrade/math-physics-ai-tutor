@@ -9,7 +9,7 @@ Tutor educacional inteligente de Matemática usando IA.
 
 ## 🌐 Aplicação Online
 
-👉 https://math-physics-tutor.streamlit.app/
+👉 https://math-tutor-ai.streamlit.app/
 
 ## 🧠 Funcionalidades
 
