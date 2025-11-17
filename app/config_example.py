@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 
-# Carrega .env se existir (local)
+# Carrega .env localmente
 load_dotenv()
 
 API_KEY = os.getenv("OPENAI_API_KEY")
