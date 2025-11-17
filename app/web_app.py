@@ -1,16 +1,21 @@
 # app/web_app.py
 
 import sys, os
-CURRENT_DIR = os.path.dirname(os.path.abspath(..))
+
+# Caminho do diretório atual (app/)
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Caminho da raiz do projeto
 ROOT_DIR = os.path.dirname(CURRENT_DIR)
+
+# Adiciona raiz ao PYTHONPATH
 if ROOT_DIR not in sys.path:
     sys.path.insert(0, ROOT_DIR)
 
-
 import streamlit as st
 
-from app.core import get_client, chat_with_memory
-from app.subjects import detect_subject
+from core import get_client, chat_with_memory     # CORRIGIDO
+from subjects import detect_subject               # CORRIGIDO
 
 
 def init_session_state():
@@ -48,22 +53,15 @@ def main():
 
     # Mostrar histórico
     for msg in st.session_state.history:
-        if msg["role"] == "user":
-            with st.chat_message("user"):
-                st.markdown(msg["content"])
-        elif msg["role"] == "assistant":
-            with st.chat_message("assistant"):
-                st.markdown(msg["content"])
+        with st.chat_message(msg["role"]):
+            st.markdown(msg["content"])
 
-    # Entrada do usuário (chat input)
     user_message = st.chat_input("Digite sua pergunta de Matemática ou Física...")
 
     if user_message:
-        # Adiciona mensagem do usuário visualmente
         with st.chat_message("user"):
             st.markdown(user_message)
 
-        # Chama modelo
         reply, new_history = chat_with_memory(
             client=st.session_state.client,
             history=st.session_state.history,
@@ -74,7 +72,6 @@ def main():
 
         st.session_state.history = new_history
 
-        # Exibe resposta
         with st.chat_message("assistant"):
             st.markdown(reply)
 

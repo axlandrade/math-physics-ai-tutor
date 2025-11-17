@@ -1,22 +1,26 @@
 # app/core.py
 
 import sys, os
-CURRENT_DIR = os.path.dirname(os.path.abspath(..))
+
+# Caminho do diretório atual (app/)
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Caminho do diretório raiz do projeto
 ROOT_DIR = os.path.dirname(CURRENT_DIR)
+
+# Garantir que o Python consiga importar "app"
 if ROOT_DIR not in sys.path:
     sys.path.insert(0, ROOT_DIR)
 
 import json
-import os
 from datetime import datetime
 from typing import List, Dict
 
 from openai import OpenAI
 
-from app.config import API_KEY
-from app.subjects import detect_subject, build_subject_instruction
-from app.pedagogical_profile import SYSTEM_PROMPT
-
+from config import API_KEY, MODEL_NAME   # CORRIGIDO
+from subjects import detect_subject, build_subject_instruction   # CORRIGIDO
+from pedagogical_profile import SYSTEM_PROMPT   # CORRIGIDO
 
 
 def get_client() -> OpenAI:
@@ -36,9 +40,6 @@ def log_interaction(
     subject: str,
     source: str = "cli",
 ):
-    """
-    Registra cada interação em um arquivo JSONL por dia.
-    """
     ensure_logs_dir()
     date_str = datetime.now().strftime("%Y-%m-%d")
     log_path = os.path.join("logs", f"chat_log_{date_str}.jsonl")
@@ -67,17 +68,10 @@ def chat_with_memory(
     user_message: str,
     max_history: int = 10,
     source: str = "cli",
-) -> (str, List[Dict[str, str]]):
-    """
-    history: lista de mensagens no formato [{"role": "...", "content": "..."}]
-    Retorna (resposta_do_bot, nova_history).
-    """
-
+):
     system_content, subject = build_system_message(user_message)
 
-    # Construímos o contexto: system + histórico + nova mensagem
     messages = [{"role": "system", "content": system_content}]
-    # limitamos o tamanho do histórico para não estourar contexto
     trimmed_history = history[-max_history:]
     messages.extend(trimmed_history)
     messages.append({"role": "user", "content": user_message})
@@ -89,13 +83,11 @@ def chat_with_memory(
 
     reply = response.choices[0].message.content.strip()
 
-    # Atualiza histórico
     new_history = trimmed_history + [
         {"role": "user", "content": user_message},
         {"role": "assistant", "content": reply},
     ]
 
-    # Logging
     log_interaction(messages=messages, reply=reply, subject=subject, source=source)
 
     return reply, new_history
