@@ -2,7 +2,8 @@
 
 import streamlit as st
 
-from .core import get_client, chat_with_memory
+from app.core import get_client, chat_with_memory
+from app.subjects import detect_subject
 
 
 def init_session_state():

@@ -7,9 +7,10 @@ from typing import List, Dict
 
 from openai import OpenAI
 
-from .config import API_KEY, MODEL_NAME
-from .pedagogical_profile import SYSTEM_PROMPT
-from .subjects import detect_subject, build_subject_instruction
+from app.config import API_KEY
+from app.subjects import detect_subject, build_subject_instruction
+from app.pedagogical_profile import SYSTEM_PROMPT
+
 
 
 def get_client() -> OpenAI:
