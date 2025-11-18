@@ -5,10 +5,9 @@ enableXsrfProtection = false
 port = 8501
 
 [theme]
-base="light"
-primaryColor="#003366"
-backgroundColor="#F7F7F7"
-secondaryBackgroundColor="#E8ECF2"
-textColor="#1A1A1A"
-font="serif"
-
+base="dark"
+primaryColor="#39FF14"
+backgroundColor="#000000"
+secondaryBackgroundColor="#0A0A0A"
+textColor="#FFFFFF"
+font="sans serif"
