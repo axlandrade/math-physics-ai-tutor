@@ -24,7 +24,7 @@ def main():
 
     col1, col2 = st.columns([1, 4])
     with col1:
-        st.image(logo, width=100)
+        st.image("logo.png", width=100)
     with col2:
         st.title("Math & Physics AI Tutor")
         st.write("Desenvolvido por **Axl Andrade**")
