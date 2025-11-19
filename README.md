@@ -36,9 +36,6 @@ Abaixo está o diagrama da arquitetura:
 - **cli_chat.py**  
   Interface de linha de comando para testes e interações rápidas no terminal.
 
-- **config_example.py**  
-  Exemplo de arquivo de configuração para variáveis como chave da API e nome do modelo.
-
 ## Requisitos
 
 Os pacotes necessários estão listados no arquivo `requirements.txt`. Instale com:
