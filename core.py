@@ -13,10 +13,11 @@ from pedagogical_profile import SYSTEM_PROMPT   # CORRIGIDO
 
 
 def get_client() -> OpenAI:
-    api_key = API_KEY or os.getenv("OPENAI_API_KEY")
+    api_key = os.getenv("OPENAI_API_KEY")
     if not api_key:
-        raise ValueError("API_KEY não configurada. Defina em config.py ou variável de ambiente.")
+        raise ValueError("OPENAI_API_KEY não configurada. Defina nas variáveis de ambiente.")
     return OpenAI(api_key=api_key)
+
 
 
 def ensure_logs_dir():
