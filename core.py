@@ -7,7 +7,7 @@ from typing import List, Dict
 
 from openai import OpenAI
 
-from config import API_KEY, MODEL_NAME   # CORRIGIDO
+# from config import API_KEY, MODEL_NAME   # CORRIGIDO
 from subjects import detect_subject, build_subject_instruction   # CORRIGIDO
 from pedagogical_profile import SYSTEM_PROMPT   # CORRIGIDO
 
