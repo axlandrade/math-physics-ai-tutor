@@ -1,6 +1,4 @@
-# app/cli_chat.py
-
-from app.core import get_client, chat_with_memory
+from core import chat_with_memory, get_client
 
 
 def main():

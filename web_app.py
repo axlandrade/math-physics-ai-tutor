@@ -1,25 +1,27 @@
-# app/web_app.py
-
 import streamlit as st
 
-from core import get_client, chat_with_memory
-from subjects import detect_subject
-from PIL import Image
+from core import chat_with_memory, get_client
+
 
 def init_session_state():
     if "history" not in st.session_state:
         st.session_state.history = []
     if "client" not in st.session_state:
-        st.session_state.client = get_client()
+        try:
+            st.session_state.client = get_client()
+        except RuntimeError as exc:
+            st.error(str(exc))
+            st.stop()
+
 
 st.set_page_config(
     page_title="Math AI Tutor",
     page_icon="logo.png",
     layout="centered"
-    )
+)
+
 
 def main():
-
     init_session_state()
 
     # Limitar largura do conteúdo e centralizar
@@ -43,7 +45,6 @@ def main():
     with col2:
         st.title("Math & Physics AI Tutor")
         st.write("Desenvolvido por **Axl Andrade**")
-
 
     with st.sidebar:
         st.header("Configurações")

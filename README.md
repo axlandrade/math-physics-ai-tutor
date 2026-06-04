@@ -3,95 +3,122 @@
 [![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)]()
 [![Streamlit](https://img.shields.io/badge/Streamlit-App-red.svg)]()
 [![OpenAI](https://img.shields.io/badge/OpenAI-API-black.svg)]()
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)]()
+[![CI](https://github.com/axlandrade/math-ai-tutor/actions/workflows/ci.yml/badge.svg)](https://github.com/axlandrade/math-ai-tutor/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-Aplicação educativa baseada em inteligência artificial para apoio ao ensino de Matemática e Física, utilizando a API da OpenAI. A aplicação oferece suporte pedagógico personalizado com base em perfis educacionais e temas específicos.
+Tutor educacional de Matemática e Física com interface web em Streamlit, memória curta de
+conversa e respostas guiadas por um perfil pedagógico especializado.
 
-Aplicação disponível em produção em:
+Aplicação em produção:
 
 https://math-tutor-ai.streamlit.app/
 
-## Estrutura da Aplicação
+## Recursos
 
-A arquitetura da aplicação é construída em módulos independentes que interagem por meio do núcleo (`core.py`). 
+- Atendimento focado em Matemática e Física para Ensino Médio e início de graduação.
+- Detecção simples de tema para ajustar a instrução pedagógica do modelo.
+- Memória configurável de conversa na interface web.
+- Registro local das interações em JSONL para auditoria e melhoria do produto.
+- Interface web em Streamlit e interface de linha de comando.
+- Configuração via variáveis de ambiente e arquivo `.env`.
 
-Abaixo está o diagrama da arquitetura:
+## Arquitetura
 
 ![Arquitetura](math-ai-tutor.png)
 
-### Principais Módulos
-
-- **core.py**  
-  Responsável por integrar os módulos, processar as mensagens e controlar as interações com a API da OpenAI.
-
-- **web_app.py**  
-  Interface web desenvolvida em Streamlit, responsável por receber mensagens do usuário e exibir as respostas no navegador.
-
-- **subjects.py**  
-  Define os temas e campos de atuação da tutoria (Matemática, Física, etc.), indicando como cada tipo de pergunta deve ser tratado.
-
-- **pedagogical_profile.py**  
-  Define o perfil pedagógico, com regras de comunicação, uso de LaTeX e estilo de explicação.
-
-- **cli_chat.py**  
-  Interface de linha de comando para testes e interações rápidas no terminal.
+| Arquivo | Responsabilidade |
+| --- | --- |
+| `core.py` | Orquestra mensagens, cliente OpenAI, memória, modelo e logs. |
+| `web_app.py` | Interface web em Streamlit. |
+| `cli_chat.py` | Interface de terminal para testes e uso local. |
+| `subjects.py` | Heurísticas de detecção de Matemática, Física ou tema genérico. |
+| `pedagogical_profile.py` | Prompt de sistema e regras pedagógicas do tutor. |
 
 ## Requisitos
 
-Os pacotes necessários estão listados no arquivo `requirements.txt`. Instale com:
+- Python 3.10 ou superior.
+- Chave da API da OpenAI.
+
+## Configuração Local
+
+Crie e ative um ambiente virtual:
 
 ```bash
-pip install -r requirements.txt
+python -m venv .venv
+source .venv/bin/activate
 ```
 
-## Variáveis de Ambiente
+Instale o projeto:
 
-Crie um arquivo `.env` na raiz do projeto com o seguinte conteúdo:
+```bash
+python -m pip install --upgrade pip
+python -m pip install -e ".[dev]"
+```
+
+Crie o arquivo `.env` a partir do exemplo:
+
+```bash
+cp .env.example .env
+```
+
+Edite o `.env`:
 
 ```bash
 OPENAI_API_KEY=your_api_key_here
+OPENAI_MODEL=gpt-4.1-nano
+LOGS_DIR=logs
 ```
 
-Em produção (por exemplo, no Streamlit Cloud), defina a variável de ambiente `OPENAI_API_KEY` diretamente nas configurações da plataforma.
+## Execução
 
-## Execução da Aplicação
-
-### Via interface web (Streamlit)
-
-Para rodar localmente:
+Interface web:
 
 ```bash
-streamlit run app/web_app.py
+streamlit run web_app.py
 ```
 
-A aplicação será aberta no navegador padrão, permitindo conversar com o tutor.
-
-### Via terminal (CLI)
-
-Para testar o tutor no terminal:
+Interface de terminal:
 
 ```bash
-python -m app.cli_chat
+math-ai-tutor
 ```
 
-## Fluxo de Funcionamento
+Também é possível executar diretamente:
 
-1. O usuário envia uma mensagem pela interface (web ou terminal).
-2. O `core.py` recebe a mensagem e aplica o perfil pedagógico definido em `pedagogical_profile.py`.
-3. A mensagem é enriquecida com informações de tema via `subjects.py`.
-4. O conteúdo é enviado para a API da OpenAI por meio do cliente configurado.
-5. A resposta é registrada em logs e devolvida ao usuário conforme as regras pedagógicas.
+```bash
+python cli_chat.py
+```
 
-## Observações Importantes
+## Qualidade
 
-- A aplicação não utiliza emojis nas respostas.
-- O sistema foi desenvolvido para estudantes do Ensino Médio e início de graduação.
-- O código está preparado para futuras expansões com novos módulos, ajustes de perfil pedagógico ou inclusão de outros temas.
+Rode lint e testes antes de publicar alterações:
+
+```bash
+ruff check .
+pytest
+```
+
+O workflow de CI executa os mesmos passos a cada push para `main` e em pull requests.
+
+## Variáveis de Ambiente
+
+| Variável | Obrigatória | Padrão | Descrição |
+| --- | --- | --- | --- |
+| `OPENAI_API_KEY` | Sim | - | Chave usada para autenticar na API da OpenAI. |
+| `OPENAI_MODEL` | Não | `gpt-4.1-nano` | Modelo usado nas respostas do tutor. |
+| `LOGS_DIR` | Não | `logs` | Diretório onde os arquivos JSONL de conversa são salvos. |
+
+## Logs
+
+Cada interação é salva em `logs/chat_log_YYYY-MM-DD.jsonl` com timestamp, tema detectado,
+origem da conversa, mensagens enviadas ao modelo e resposta retornada.
+
+Não faça commit de `.env` nem do diretório `logs/`.
+
+## Licença
+
+Distribuído sob a licença MIT. Veja [LICENSE](LICENSE).
 
 ## Autor
 
 Desenvolvido por **Axl Andrade**.
-
----
-
-Para expandir as funcionalidades ou incluir novos temas, recomenda-se começar editando os arquivos `subjects.py` e `pedagogical_profile.py`.
