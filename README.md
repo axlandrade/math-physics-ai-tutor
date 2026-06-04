@@ -3,41 +3,44 @@
 [![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)]()
 [![Streamlit](https://img.shields.io/badge/Streamlit-App-red.svg)]()
 [![OpenAI](https://img.shields.io/badge/OpenAI-API-black.svg)]()
-[![CI](https://github.com/axlandrade/math-ai-tutor/actions/workflows/ci.yml/badge.svg)](https://github.com/axlandrade/math-ai-tutor/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-Tutor educacional de Matemática e Física com interface web em Streamlit, memória curta de
-conversa e respostas guiadas por um perfil pedagógico especializado.
+Tutor educacional de Matemática e Física com interface web em Streamlit, integração com a
+API da OpenAI, memória curta de conversa e respostas orientadas por um perfil pedagógico.
 
-Aplicação em produção:
+O projeto foi pensado para apoiar estudantes do Ensino Médio e do início da graduação com
+explicações estruturadas, uso adequado de LaTeX e atenção especial a unidades, interpretação
+conceitual e passos de resolução.
 
-https://math-tutor-ai.streamlit.app/
+**Aplicação em produção:** https://math-tutor-ai.streamlit.app/
 
-## Recursos
+## Destaques
 
-- Atendimento focado em Matemática e Física para Ensino Médio e início de graduação.
-- Detecção simples de tema para ajustar a instrução pedagógica do modelo.
-- Memória configurável de conversa na interface web.
-- Registro local das interações em JSONL para auditoria e melhoria do produto.
-- Interface web em Streamlit e interface de linha de comando.
-- Configuração via variáveis de ambiente e arquivo `.env`.
+- Interface web simples e responsiva construída com Streamlit.
+- CLI para testes rápidos e uso local no terminal.
+- Detecção heurística de tema para adaptar o prompt a Matemática, Física ou perguntas genéricas.
+- Prompt pedagógico centralizado, com regras de explicação, escopo e formatação matemática.
+- Memória configurável para manter contexto recente da conversa.
+- Logs locais em JSONL para auditoria, depuração e evolução do tutor.
+- Configuração por `.env`, com modelo e diretório de logs ajustáveis por ambiente.
 
 ## Arquitetura
 
-![Arquitetura](math-ai-tutor.png)
+![Arquitetura do Math AI Tutor](math-ai-tutor.png)
 
 | Arquivo | Responsabilidade |
 | --- | --- |
-| `core.py` | Orquestra mensagens, cliente OpenAI, memória, modelo e logs. |
-| `web_app.py` | Interface web em Streamlit. |
-| `cli_chat.py` | Interface de terminal para testes e uso local. |
-| `subjects.py` | Heurísticas de detecção de Matemática, Física ou tema genérico. |
-| `pedagogical_profile.py` | Prompt de sistema e regras pedagógicas do tutor. |
+| `core.py` | Orquestra cliente OpenAI, prompt de sistema, memória, modelo e logs. |
+| `web_app.py` | Implementa a experiência web em Streamlit. |
+| `cli_chat.py` | Expõe uma interface de linha de comando para conversas locais. |
+| `subjects.py` | Detecta o tema da pergunta e constrói instruções específicas por área. |
+| `pedagogical_profile.py` | Define o perfil pedagógico e as regras de resposta do tutor. |
+| `tests/` | Garante comportamento básico de tema, prompt, memória e persistência de logs. |
 
 ## Requisitos
 
 - Python 3.10 ou superior.
-- Chave da API da OpenAI.
+- Uma chave válida da API da OpenAI.
 
 ## Configuração Local
 
@@ -48,20 +51,20 @@ python -m venv .venv
 source .venv/bin/activate
 ```
 
-Instale o projeto:
+Instale o projeto com dependências de desenvolvimento:
 
 ```bash
 python -m pip install --upgrade pip
 python -m pip install -e ".[dev]"
 ```
 
-Crie o arquivo `.env` a partir do exemplo:
+Crie seu arquivo de ambiente:
 
 ```bash
 cp .env.example .env
 ```
 
-Edite o `.env`:
+Preencha as variáveis:
 
 ```bash
 OPENAI_API_KEY=your_api_key_here
@@ -69,7 +72,7 @@ OPENAI_MODEL=gpt-4.1-nano
 LOGS_DIR=logs
 ```
 
-## Execução
+## Como Rodar
 
 Interface web:
 
@@ -83,7 +86,7 @@ Interface de terminal:
 math-ai-tutor
 ```
 
-Também é possível executar diretamente:
+Execução direta alternativa:
 
 ```bash
 python cli_chat.py
@@ -91,29 +94,49 @@ python cli_chat.py
 
 ## Qualidade
 
-Rode lint e testes antes de publicar alterações:
+Antes de publicar alterações, rode:
 
 ```bash
 ruff check .
 pytest
 ```
 
-O workflow de CI executa os mesmos passos a cada push para `main` e em pull requests.
+Os testes cobrem:
+
+- classificação de perguntas por tema;
+- composição do prompt de sistema;
+- recorte da memória de conversa;
+- gravação de logs em JSONL;
+- seleção de modelo por variável de ambiente.
 
 ## Variáveis de Ambiente
 
 | Variável | Obrigatória | Padrão | Descrição |
 | --- | --- | --- | --- |
 | `OPENAI_API_KEY` | Sim | - | Chave usada para autenticar na API da OpenAI. |
-| `OPENAI_MODEL` | Não | `gpt-4.1-nano` | Modelo usado nas respostas do tutor. |
-| `LOGS_DIR` | Não | `logs` | Diretório onde os arquivos JSONL de conversa são salvos. |
+| `OPENAI_MODEL` | Não | `gpt-4.1-nano` | Modelo usado para gerar respostas. |
+| `LOGS_DIR` | Não | `logs` | Diretório onde os arquivos JSONL são salvos. |
 
-## Logs
+## Logs e Privacidade
 
-Cada interação é salva em `logs/chat_log_YYYY-MM-DD.jsonl` com timestamp, tema detectado,
-origem da conversa, mensagens enviadas ao modelo e resposta retornada.
+As interações são salvas em `logs/chat_log_YYYY-MM-DD.jsonl` com timestamp, tema detectado,
+origem da conversa, mensagens enviadas ao modelo e resposta gerada.
 
-Não faça commit de `.env` nem do diretório `logs/`.
+O diretório `logs/` e o arquivo `.env` não devem ser versionados. Evite registrar dados
+pessoais, sensíveis ou identificáveis durante testes e demonstrações.
+
+## Estrutura de Desenvolvimento
+
+O repositório usa `pyproject.toml` como ponto central de configuração para pacote,
+dependências, lint e testes. O script `math-ai-tutor` é registrado como entrypoint da CLI
+quando o projeto é instalado em modo editável.
+
+Para expandir o tutor, os pontos de entrada mais importantes são:
+
+- `subjects.py`, para ampliar a detecção de áreas e temas;
+- `pedagogical_profile.py`, para ajustar tom, escopo e regras pedagógicas;
+- `core.py`, para alterar modelo, memória, logs ou integração com a API;
+- `web_app.py`, para evoluir a experiência de usuário no Streamlit.
 
 ## Licença
 
